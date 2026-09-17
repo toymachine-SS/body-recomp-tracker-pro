@@ -1,4 +1,4 @@
-const VERSION='brt-pro-v3-20260914';
+const VERSION='brt-pro-v3-1-20260917';
 const STATIC_CACHE=VERSION+'-static';
 const RUNTIME_CACHE=VERSION+'-runtime';
 const APP_SHELL=['./','./index.html','./manifest.webmanifest','./icon-180.png','./icon-192.png','./icon-512.png'];

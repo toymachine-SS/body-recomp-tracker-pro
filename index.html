@@ -55,7 +55,7 @@ label{display:block;font-size:11px;color:var(--muted);margin:0 0 5px}.field{marg
 </head>
 <body>
 <header class="topbar">
-  <div class="brand"><h1>Body Recomp Tracker Pro <span style="font-size:11px;color:var(--blue)">v2</span></h1><span class="goal">体脂肪15%以下</span></div>
+  <div class="brand"><h1>Body Recomp Tracker Pro <span style="font-size:11px;color:var(--blue)">v2</span></h1><span class="goal">目標は設定画面で変更</span></div>
   <div class="storage"><span id="storageDot" class="dot"></span><span id="storageText">保存機能を確認中...</span></div>
 </header>
 <main>
@@ -63,8 +63,8 @@ label{display:block;font-size:11px;color:var(--muted);margin:0 0 5px}.field{marg
 <section id="dashboard" class="view active">
   <div class="page-title">ダッシュボード</div>
   <div class="card"><h2>今日の進捗</h2><div class="kpis">
-    <div class="kpi"><div class="label">摂取</div><div class="value"><span id="dKcal">0</span><small> kcal</small></div><div class="sub">目標 <span id="dKcalTarget">1850</span></div></div>
-    <div class="kpi"><div class="label">タンパク質</div><div class="value"><span id="dP">0</span><small> g</small></div><div class="sub">目標 <span id="dPTarget">145</span>g</div></div>
+    <div class="kpi"><div class="label">摂取</div><div class="value"><span id="dKcal">0</span><small> kcal</small></div><div class="sub">目標 <span id="dKcalTarget">2000</span></div></div>
+    <div class="kpi"><div class="label">タンパク質</div><div class="value"><span id="dP">0</span><small> g</small></div><div class="sub">目標 <span id="dPTarget">150</span>g</div></div>
     <div class="kpi"><div class="label">体重</div><div class="value"><span id="dWeight">--</span><small> kg</small></div><div class="sub">体脂肪優先</div></div>
     <div class="kpi"><div class="label">体脂肪</div><div class="value"><span id="dBF">--</span><small> %</small></div><div class="sub">目標 15%以下</div></div>
   </div><div class="divider"></div><div class="progress"><span id="dKcalBar"></span></div><div id="dAdvice" class="callout" style="margin-top:10px"></div></div>
@@ -115,7 +115,7 @@ label{display:block;font-size:11px;color:var(--muted);margin:0 0 5px}.field{marg
 <div id="toast" class="toast"></div>
 <script>
 'use strict';
-const APP_VERSION='3.0.0';
+const APP_VERSION='3.1.0';
 const CORE_SESSIONS={
  '月｜下半身A':[
   ['スクワット','20〜30kg','6〜10',3,'2〜3分'],['レッグプレス','軽めから','10〜12',3,'90秒'],['レッグカール','10〜20kg','10〜15',3,'60〜90秒'],['カーフレイズ','自重〜','15〜20',3,'60秒'],['プランク','自重','20〜30秒',2,'60秒']],
@@ -138,7 +138,7 @@ const LABELS={chest:'胸',back:'背中',quads:'脚前',hams:'ハム・臀部',sh
 const PRESETS={
  '大福 1個':[220,4,1,50],'バナナ 1本':[90,1,0.2,23],'プロテイン 1杯':[120,22,2,4],'白米 180g':[281,4.5,0.5,66],'白米 150g':[234,3.8,0.4,55],'白米 100g':[156,2.5,0.3,37],'ちくわ 1本':[35,3.5,0.5,4],'ゆで卵 1個':[76,6.2,5.2,0.2],'納豆 1パック':[90,7.5,5,5],'羊羹 30g':[89,1,0.1,21],'鶏むね肉 150g':[165,34,3.6,0],'鮭 150g':[300,33,18,0],'サバ 150g':[320,31,22,0],'ブロッコリー 100g':[37,5.4,0.6,6.6],'無糖ヨーグルト 150g':[92,5.4,4.5,7.3],'無塩ナッツ 15g':[90,3,8,3]
 };
-const DEFAULT_STATE={version:APP_VERSION,settings:{sex:'male',age:43,height:159,startWeight:69,startBF:24,targetBF:15,kcal:1850,p:145,f:55,c:190},days:{},workouts:{}};
+const DEFAULT_STATE={version:APP_VERSION,settings:{sex:'male',age:30,height:170,startWeight:70,startBF:20,targetBF:18,kcal:2000,p:150,f:60,c:220},days:{},workouts:{}};
 let STATE=structuredClone(DEFAULT_STATE), storageMode='memory', db=null, currentRecovery='追加｜軽回復';
 
 function clone(x){return JSON.parse(JSON.stringify(x))}
@@ -201,7 +201,7 @@ function sumFoodUI(){const t=collectFood().reduce((a,x)=>({k:a.k+x.k,p:a.p+x.p,f
 async function saveFood(){const d=fDate.value||today();STATE.days[d]=STATE.days[d]||{};STATE.days[d].food=collectFood();await persist();toast('食事を保存しました')}
 function loadFoodDate(){const d=fDate.value||today();foodList.innerHTML='';const items=STATE.days[d]?.food||[];if(items.length)items.forEach(addFoodItem);else addFoodItem();foodTargetText.value=`${STATE.settings.kcal} kcal / P${STATE.settings.p}g`;sumFoodUI()}
 
-function metricAdviceText(){const sleep=num(mSleep.value),bf=num(mBF.value),veg=num(mVeg.value),cond=num(mCondition.value);const a=[];if(sleep&&sleep<4)a.push('睡眠4時間未満：高重量は避ける');else if(sleep>=5)a.push('生活上の上限5時間を確保');if(veg&&veg<250)a.push('野菜は300g前後を目標');if(bf&&bf<=STATE.settings.targetBF)a.push('目標体脂肪率を達成');if(cond&&cond<=2)a.push('疲労が強い日は追加トレ不要');return a.join(' / ')||'入力すると、その日の簡易評価を表示します。'}
+function metricAdviceText(){const sleep=num(mSleep.value),bf=num(mBF.value),veg=num(mVeg.value),cond=num(mCondition.value);const a=[];if(sleep&&sleep<4)a.push('睡眠4時間未満：高重量は避ける');else if(sleep>=5)a.push('睡眠時間をできる範囲で確保');if(veg&&veg<250)a.push('野菜は300g前後を目標');if(bf&&bf<=STATE.settings.targetBF)a.push('目標体脂肪率を達成');if(cond&&cond<=2)a.push('疲労が強い日は追加トレ不要');return a.join(' / ')||'入力すると、その日の簡易評価を表示します。'}
 function updateMetricAdvice(){metricAdvice.textContent=metricAdviceText()}
 async function saveMetrics(){const d=mDate.value||today();STATE.days[d]=STATE.days[d]||{};STATE.days[d].metrics={weight:num(mWeight.value),bf:num(mBF.value),waist:num(mWaist.value),sleep:num(mSleep.value),steps:num(mSteps.value),veg:num(mVeg.value),water:num(mWater.value),condition:num(mCondition.value),memo:mMemo.value};await persist();toast('身体記録を保存しました');renderMetricHistory()}
 function loadMetricDate(){const d=mDate.value||today(),m=STATE.days[d]?.metrics||{};mWeight.value=m.weight||'';mBF.value=m.bf||'';mWaist.value=m.waist||'';mSleep.value=m.sleep||'';mSteps.value=m.steps||'';mVeg.value=m.veg||'';mWater.value=m.water||'';mCondition.value=m.condition||'';mMemo.value=m.memo||'';updateMetricAdvice();renderMetricHistory()}
