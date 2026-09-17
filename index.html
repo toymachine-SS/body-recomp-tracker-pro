@@ -1,0 +1,263 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Recomp Pro">
+<meta name="theme-color" content="#0f6fff">
+<meta name="color-scheme" content="light">
+<meta name="apple-touch-fullscreen" content="yes">
+<meta name="format-detection" content="telephone=no">
+<meta name="mobile-web-app-capable" content="yes">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" sizes="180x180" href="icon-180.png">
+<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
+<title>Body Recomp Tracker Pro</title>
+<style>
+:root{
+  --bg:#f3f6fb;--card:#fff;--ink:#172033;--muted:#69758c;--line:#dfe6f1;--blue:#0f6fff;
+  --blue2:#eaf2ff;--green:#168654;--green2:#eaf8f1;--amber:#a86400;--amber2:#fff4de;
+  --red:#bc3140;--red2:#ffedf0;--shadow:0 5px 20px rgba(30,45,80,.07);
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html{-webkit-text-size-adjust:100%;background:var(--bg)}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"Helvetica Neue","Hiragino Sans","Yu Gothic UI",sans-serif;padding-bottom:calc(76px + env(safe-area-inset-bottom));}
+button,input,select,textarea{font:inherit}button{touch-action:manipulation}
+.topbar{position:sticky;top:0;z-index:50;padding:calc(8px + env(safe-area-inset-top)) 14px 8px;background:rgba(255,255,255,.96);backdrop-filter:blur(14px);border-bottom:1px solid var(--line)}
+.brand{display:flex;justify-content:space-between;align-items:center;gap:10px}.brand h1{font-size:18px;margin:0;font-weight:850;letter-spacing:-.2px}.goal{font-size:11px;font-weight:800;color:var(--blue);background:var(--blue2);border-radius:999px;padding:6px 9px;white-space:nowrap}
+.storage{margin-top:7px;display:flex;align-items:center;gap:6px;font-size:11px;color:var(--muted)}.dot{width:8px;height:8px;border-radius:50%;background:#9aa5b6}.dot.ok{background:var(--green)}.dot.warn{background:var(--amber)}
+main{max-width:720px;margin:auto;padding:12px 10px 24px}.view{display:none}.view.active{display:block}.page-title{font-size:23px;margin:6px 4px 12px;font-weight:850;letter-spacing:-.3px}
+.card{background:var(--card);border:1px solid var(--line);box-shadow:var(--shadow);border-radius:18px;padding:14px;margin-bottom:10px}.card h2,.card h3{margin:0 0 10px}.card h2{font-size:18px}.card h3{font-size:15px}.sub{color:var(--muted);font-size:12px;line-height:1.55}.divider{height:1px;background:var(--line);margin:12px 0}
+.kpis{display:grid;grid-template-columns:1fr 1fr;gap:8px}.kpi{background:#f8faff;border:1px solid var(--line);border-radius:14px;padding:11px}.kpi .label{font-size:11px;color:var(--muted)}.kpi .value{font-size:21px;font-weight:850;margin-top:4px}.kpi small{font-size:11px;color:var(--muted)}
+.progress{height:9px;background:#edf1f6;border-radius:999px;overflow:hidden}.progress>span{display:block;height:100%;background:var(--blue);width:0}.goodbar>span{background:var(--green)}
+.callout{padding:11px 12px;background:var(--blue2);border-left:4px solid var(--blue);border-radius:12px;font-size:12px;line-height:1.55}.callout.warn{background:var(--amber2);border-left-color:var(--amber)}.callout.bad{background:var(--red2);border-left-color:var(--red)}.callout.good{background:var(--green2);border-left-color:var(--green)}
+.btn{min-height:48px;border:0;border-radius:13px;padding:10px 14px;font-weight:800;background:#edf1f7;color:var(--ink);cursor:pointer}.btn.primary{background:var(--blue);color:white}.btn.green{background:var(--green);color:white}.btn.danger{background:var(--red2);color:var(--red)}.btn.sm{min-height:40px;font-size:12px;padding:8px 10px}.actions{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px}.actions.one{grid-template-columns:1fr}.actions.three{grid-template-columns:repeat(3,1fr)}
+label{display:block;font-size:11px;color:var(--muted);margin:0 0 5px}.field{margin-bottom:10px}input,select,textarea{display:block;width:100%;min-height:48px;border:1px solid #d7deea;background:#fff;color:var(--ink);border-radius:13px;padding:10px 11px;font-size:16px;outline:none}input:focus,select:focus,textarea:focus{border-color:#85b4ff;box-shadow:0 0 0 3px rgba(15,111,255,.10)}textarea{min-height:82px;resize:vertical}.grid2{display:grid;grid-template-columns:1fr 1fr;gap:9px}.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.bottomnav{position:fixed;z-index:70;left:0;right:0;bottom:0;background:rgba(255,255,255,.98);backdrop-filter:blur(15px);border-top:1px solid var(--line);display:grid;grid-template-columns:repeat(5,1fr);padding:5px 5px calc(5px + env(safe-area-inset-bottom));box-shadow:0 -8px 28px rgba(25,38,70,.09)}.navbtn{border:0;background:transparent;min-height:54px;border-radius:13px;color:var(--muted);font-size:10px;font-weight:750;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px}.navbtn .icon{font-size:19px;line-height:1}.navbtn.active{background:var(--blue2);color:var(--blue)}
+.quick{display:flex;gap:7px;overflow-x:auto;padding:1px 0 6px;scrollbar-width:none}.quick::-webkit-scrollbar{display:none}.chip{white-space:nowrap;border:1px solid var(--line);background:white;border-radius:999px;min-height:38px;padding:7px 11px;color:var(--ink);font-size:12px;font-weight:750}.chip.active{background:var(--blue2);color:var(--blue);border-color:#bed5ff}
+.daycard{display:flex;gap:10px;align-items:center;padding:10px 0;border-bottom:1px solid var(--line)}.daycard:last-child{border-bottom:0}.daybubble{width:43px;height:43px;border-radius:14px;background:var(--blue2);color:var(--blue);display:flex;align-items:center;justify-content:center;font-weight:850;flex:0 0 auto}.daybody{min-width:0;flex:1}.daybody b{display:block;font-size:14px}.daybody span{font-size:11px;color:var(--muted)}
+.exercise-card{border:1px solid var(--line);border-radius:16px;padding:12px;margin-top:9px;background:#fbfcff}.exercise-head{display:flex;justify-content:space-between;gap:10px;align-items:flex-start}.exercise-head b{font-size:15px}.exercise-head span{font-size:10px;color:var(--muted);text-align:right}.setrow{display:grid;grid-template-columns:28px 1fr .8fr .75fr 36px;gap:6px;align-items:end;margin-top:9px}.setno{height:44px;border-radius:12px;background:#eef3fb;display:flex;align-items:center;justify-content:center;font-weight:850;font-size:12px;color:#506078}.setrow input{min-height:44px;padding:8px;font-size:15px}.setrow .donecheck{width:34px;height:44px;display:flex;align-items:center;justify-content:center}.donecheck input{width:24px;height:24px;min-height:24px;appearance:auto;-webkit-appearance:checkbox}
+.preset-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}.foodchip{border:1px solid var(--line);border-radius:13px;background:white;padding:10px;text-align:left}.foodchip b{display:block;font-size:13px}.foodchip small{color:var(--muted);font-size:10px}.fooditem{border:1px solid var(--line);background:#fbfcff;border-radius:15px;padding:11px;margin-top:8px}.foodtop{display:flex;gap:8px}.foodtop input{flex:1}.remove{width:46px;min-width:46px;border:0;border-radius:12px;background:var(--red2);color:var(--red);font-weight:900}.macro4{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-top:7px}.macro4 input{min-height:42px;font-size:14px;padding:7px}.macro4 label{font-size:9px}
+.score{font-size:42px;font-weight:900;color:var(--blue)}.badge{display:inline-flex;align-items:center;border-radius:999px;padding:5px 8px;background:#edf1f6;color:#536077;font-size:10px;font-weight:800;margin:2px}.badge.good{background:var(--green2);color:var(--green)}.badge.warn{background:var(--amber2);color:var(--amber)}.badge.bad{background:var(--red2);color:var(--red)}
+.muscle{display:grid;grid-template-columns:70px 1fr 50px;gap:8px;align-items:center;margin:8px 0}.muscle .name{font-size:12px;font-weight:800}.muscle .pct{font-size:11px;text-align:right;color:var(--muted)}
+.recovery-ex{display:flex;justify-content:space-between;gap:10px;padding:9px 0;border-bottom:1px solid var(--line)}.recovery-ex:last-child{border-bottom:0}.recovery-ex b{font-size:13px}.recovery-ex span{font-size:11px;color:var(--muted);text-align:right}
+.history-item{border:1px solid var(--line);border-radius:14px;padding:11px;margin-top:8px}.history-item .top{display:flex;justify-content:space-between;gap:8px}.history-item b{font-size:13px}.history-item small{color:var(--muted)}
+.toast{position:fixed;z-index:100;left:50%;bottom:calc(86px + env(safe-area-inset-bottom));transform:translateX(-50%) translateY(20px);background:#172033;color:white;border-radius:999px;padding:10px 14px;font-size:12px;font-weight:750;opacity:0;pointer-events:none;transition:.2s;max-width:88%;text-align:center}.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+.empty{text-align:center;color:var(--muted);font-size:12px;padding:20px 8px}.hidden{display:none!important}
+@media(min-width:650px){main{padding:18px 18px 40px}.card{padding:16px}.kpis{grid-template-columns:repeat(4,1fr)}.preset-grid{grid-template-columns:repeat(3,1fr)}}
+@media(max-width:370px){.grid2{grid-template-columns:1fr}.actions.three{grid-template-columns:1fr}.setrow{grid-template-columns:26px 1fr 1fr}.setrow .rpe,.setrow .donecheck{grid-column:auto}.macro4{grid-template-columns:1fr 1fr}}
+
+.install-banner{display:none;background:linear-gradient(135deg,#eaf2ff,#f7fbff);border:1px solid #bed5ff;border-radius:17px;padding:13px;margin-bottom:10px}.install-banner.show{display:block}.install-row{display:flex;align-items:flex-start;gap:11px}.install-icon{width:42px;height:42px;border-radius:12px;background:#0f6fff;color:#fff;display:flex;align-items:center;justify-content:center;font-size:22px;font-weight:900;flex:0 0 auto}.install-copy{flex:1;min-width:0}.install-copy b{display:block;font-size:14px;margin-bottom:3px}.install-copy span{font-size:11px;color:var(--muted);line-height:1.45}.install-actions{display:flex;gap:7px;margin-top:9px}.install-actions .btn{flex:1;min-height:42px;font-size:12px}.install-modal{position:fixed;z-index:200;inset:0;background:rgba(17,28,48,.48);display:none;align-items:flex-end;justify-content:center}.install-modal.show{display:flex}.install-sheet{width:min(720px,100%);max-height:88vh;overflow:auto;background:#fff;border-radius:22px 22px 0 0;padding:18px 16px calc(18px + env(safe-area-inset-bottom));box-shadow:0 -12px 40px rgba(0,0,0,.18)}.install-step{display:flex;gap:10px;align-items:flex-start;padding:10px 0;border-bottom:1px solid var(--line)}.install-step:last-child{border-bottom:0}.stepno{width:29px;height:29px;border-radius:10px;background:var(--blue2);color:var(--blue);display:flex;align-items:center;justify-content:center;font-weight:900;flex:0 0 auto}.install-step b{font-size:13px}.install-step div div{font-size:11px;color:var(--muted);margin-top:2px;line-height:1.45}.appmode{display:inline-flex;align-items:center;gap:5px;background:var(--green2);color:var(--green);border-radius:999px;padding:5px 8px;font-size:10px;font-weight:800}.update-banner{display:none;background:var(--amber2);border:1px solid #f4d79c;border-radius:14px;padding:10px 11px;margin-top:8px;font-size:11px;color:#6f4a00}.update-banner.show{display:flex;align-items:center;justify-content:space-between;gap:8px}.update-banner .btn{min-height:36px;font-size:11px;padding:6px 9px;flex:0 0 auto}
+
+</style>
+</head>
+<body>
+<header class="topbar">
+  <div class="brand"><h1>Body Recomp Tracker Pro <span style="font-size:11px;color:var(--blue)">v2</span></h1><span class="goal">体脂肪15%以下</span></div>
+  <div class="storage"><span id="storageDot" class="dot"></span><span id="storageText">保存機能を確認中...</span></div>
+</header>
+<main>
+<div id="installBanner" class="install-banner"><div class="install-row"><div class="install-icon">＋</div><div class="install-copy"><b>iPhoneアプリとして使えます</b><span>Safariの「ホーム画面に追加」で、ブラウザのタブではなく独立したアプリ画面から起動できます。</span><div class="install-actions"><button class="btn primary" onclick="openInstallHelp()">追加方法を見る</button><button class="btn" onclick="dismissInstallBanner()">あとで</button></div></div></div></div><div id="updateBanner" class="update-banner"><span>新しいバージョンがあります。</span><button class="btn" onclick="applyAppUpdate()">更新する</button></div>
+<section id="dashboard" class="view active">
+  <div class="page-title">ダッシュボード</div>
+  <div class="card"><h2>今日の進捗</h2><div class="kpis">
+    <div class="kpi"><div class="label">摂取</div><div class="value"><span id="dKcal">0</span><small> kcal</small></div><div class="sub">目標 <span id="dKcalTarget">1850</span></div></div>
+    <div class="kpi"><div class="label">タンパク質</div><div class="value"><span id="dP">0</span><small> g</small></div><div class="sub">目標 <span id="dPTarget">145</span>g</div></div>
+    <div class="kpi"><div class="label">体重</div><div class="value"><span id="dWeight">--</span><small> kg</small></div><div class="sub">体脂肪優先</div></div>
+    <div class="kpi"><div class="label">体脂肪</div><div class="value"><span id="dBF">--</span><small> %</small></div><div class="sub">目標 15%以下</div></div>
+  </div><div class="divider"></div><div class="progress"><span id="dKcalBar"></span></div><div id="dAdvice" class="callout" style="margin-top:10px"></div></div>
+  <div class="card"><h2>今週</h2><div class="kpis"><div class="kpi"><div class="label">基本トレ</div><div class="value"><span id="dTrainCount">0</span><small> /4</small></div></div><div class="kpi"><div class="label">平均睡眠</div><div class="value"><span id="dSleep">--</span><small> h</small></div></div></div><div id="dRecovery" class="callout warn" style="margin-top:10px"></div><div class="actions one"><button class="btn primary" onclick="go('workout');setTimeout(()=>scrollToId('recoveryBox'),120)">週評価・リカバリーを見る</button></div></div>
+  <div class="card"><h2>直近7日</h2><div id="trendList"></div></div>
+</section>
+
+<section id="workout" class="view">
+  <div class="page-title">トレーニング</div>
+  <div class="quick"><button class="chip active" onclick="scrollToId('workoutEntry')">実績入力</button><button class="chip" onclick="scrollToId('weekEval')">週評価</button><button class="chip" onclick="scrollToId('recoveryBox')">リカバリー</button><button class="chip" onclick="scrollToId('programBox')">基本メニュー</button><button class="chip" onclick="scrollToId('historyBox')">履歴</button></div>
+  <div class="card" id="workoutEntry"><h2>今日のトレーニング入力</h2><div class="grid2"><div class="field"><label>日付</label><input id="wDate" type="date"></div><div class="field"><label>メニュー</label><select id="wSession" onchange="renderWorkoutEditor()"></select></div></div><div class="grid2"><div class="field"><label>所要時間（分）</label><input id="wMinutes" type="number" inputmode="numeric" placeholder="60"></div><div class="field"><label>全体疲労</label><select id="wFatigue"><option value="">未入力</option><option value="1">1 余裕</option><option value="2">2 軽い</option><option value="3">3 普通</option><option value="4">4 強い</option><option value="5">5 非常に強い</option></select></div></div><div id="exerciseEditor"></div><div id="workoutLive" class="callout" style="margin-top:10px"></div><div class="actions"><button class="btn primary" onclick="saveWorkout()">保存</button><button class="btn" onclick="resetWorkoutEditor()">入力クリア</button></div></div>
+  <div class="card" id="weekEval"><h2>今週の評価</h2><div id="weekKpis" class="kpis"></div><div class="divider"></div><div id="muscleBars"></div></div>
+  <div class="card" id="recoveryBox"><h2>リカバリー / 追加1日</h2><div id="recoveryWhy" class="callout warn"></div><div id="recoveryMenu" style="margin-top:10px"></div><div class="actions one"><button class="btn green" onclick="loadRecoverySession()">このメニューを実績入力へセット</button></div></div>
+  <div class="card" id="programBox"><h2>週4 基本メニュー</h2><div id="programList"></div></div>
+  <div class="card" id="historyBox"><h2>履歴</h2><div id="workoutHistory"></div></div>
+</section>
+
+<section id="food" class="view">
+  <div class="page-title">食事</div>
+  <div class="card"><div class="grid2"><div class="field"><label>日付</label><input id="fDate" type="date" onchange="loadFoodDate()"></div><div class="field"><label>目標</label><input id="foodTargetText" disabled></div></div><h3>よく使う食品</h3><div id="presetGrid" class="preset-grid"></div></div>
+  <div class="card"><h2>今日の食事</h2><div id="foodList"></div><div class="actions one"><button class="btn" onclick="addFoodItem()">＋ 食品を追加</button></div></div>
+  <div class="card"><h2>合計</h2><div class="kpis"><div class="kpi"><div class="label">kcal</div><div class="value" id="fSumKcal">0</div></div><div class="kpi"><div class="label">P</div><div class="value"><span id="fSumP">0</span><small> g</small></div></div><div class="kpi"><div class="label">F</div><div class="value"><span id="fSumF">0</span><small> g</small></div></div><div class="kpi"><div class="label">C</div><div class="value"><span id="fSumC">0</span><small> g</small></div></div></div><div id="foodAdvice" class="callout" style="margin-top:10px"></div><div class="actions one"><button class="btn primary" onclick="saveFood()">今日の食事を保存</button></div></div>
+</section>
+
+<section id="daily" class="view">
+  <div class="page-title">日々の記録</div>
+  <div class="card"><div class="field"><label>日付</label><input id="mDate" type="date" onchange="loadMetricDate()"></div><div class="grid2"><div class="field"><label>体重 kg</label><input id="mWeight" type="number" inputmode="decimal" step="0.1"></div><div class="field"><label>体脂肪率 %</label><input id="mBF" type="number" inputmode="decimal" step="0.1"></div><div class="field"><label>腹囲 cm</label><input id="mWaist" type="number" inputmode="decimal" step="0.1"></div><div class="field"><label>睡眠 h</label><input id="mSleep" type="number" inputmode="decimal" step="0.1"></div><div class="field"><label>歩数</label><input id="mSteps" type="number" inputmode="numeric" step="100"></div><div class="field"><label>野菜 g</label><input id="mVeg" type="number" inputmode="numeric" step="10"></div><div class="field"><label>水分 L</label><input id="mWater" type="number" inputmode="decimal" step="0.1"></div><div class="field"><label>体調</label><select id="mCondition"><option value="">未入力</option><option value="5">5 とても良い</option><option value="4">4 良い</option><option value="3">3 普通</option><option value="2">2 疲れ気味</option><option value="1">1 強い疲労</option></select></div></div><div class="field"><label>メモ</label><textarea id="mMemo" placeholder="筋肉痛、眠気、痛み、空腹感など"></textarea></div><div id="metricAdvice" class="callout"></div><div class="actions one"><button class="btn primary" onclick="saveMetrics()">身体記録を保存</button></div></div>
+  <div class="card"><h2>最近の記録</h2><div id="metricHistory"></div></div>
+</section>
+
+<section id="settings" class="view">
+  <div class="page-title">設定</div>
+  <div class="card"><h2>プロフィール</h2><div class="grid2"><div class="field"><label>年齢</label><input id="sAge" type="number" inputmode="numeric"></div><div class="field"><label>身長 cm</label><input id="sHeight" type="number" inputmode="decimal"></div><div class="field"><label>開始体重 kg</label><input id="sWeight" type="number" inputmode="decimal" step="0.1"></div><div class="field"><label>開始体脂肪 %</label><input id="sBF" type="number" inputmode="decimal" step="0.1"></div><div class="field"><label>目標体脂肪 %</label><input id="sTargetBF" type="number" inputmode="decimal" step="0.1"></div><div class="field"><label>性別</label><select id="sSex"><option value="male">男性</option><option value="female">女性</option></select></div></div></div>
+  <div class="card"><h2>カロリー・PFC</h2><div class="grid2"><div class="field"><label>目標 kcal</label><input id="sKcal" type="number" inputmode="numeric"></div><div class="field"><label>タンパク質 g</label><input id="sP" type="number" inputmode="numeric"></div><div class="field"><label>脂質 g</label><input id="sF" type="number" inputmode="numeric"></div><div class="field"><label>炭水化物 g</label><input id="sC" type="number" inputmode="numeric"></div></div><div class="actions"><button class="btn" onclick="recalcTargets()">目安を再計算</button><button class="btn primary" onclick="saveSettings()">設定を保存</button></div></div>
+  <div class="card"><h2>iPhone保存状態</h2><div id="storageDetail" class="callout"></div><div class="sub" style="margin-top:8px">HTTPSで公開したPWAをSafariから開く方法が最も安定します。ChatGPT内のファイルプレビューや「ファイル」アプリのHTMLプレビューでは、iOS側の制限で永続保存できない場合があります。</div></div>
+  <div class="card"><h2>バックアップ</h2><div class="actions"><button class="btn primary" onclick="shareBackup()">共有して保存</button><button class="btn" onclick="downloadBackup()">JSON書き出し</button></div><div class="actions"><label class="btn" style="display:flex;align-items:center;justify-content:center">JSONを読み込む<input id="importFile" type="file" accept="application/json" onchange="importBackup(event)" style="display:none"></label><button class="btn danger" onclick="resetAllData()">全データ削除</button></div></div>
+  <div class="card"><h2>iPhoneアプリとして使う</h2><div id="appModeStatus" class="callout good"></div><div class="actions one"><button class="btn primary" onclick="openInstallHelp()">ホーム画面への追加方法</button></div><div class="sub" style="margin-top:8px">ホーム画面から起動するとSafariのアドレスバーが表示されず、独立したアプリ画面として使えます。</div></div>
+</section>
+</main>
+<div id="installModal" class="install-modal" onclick="if(event.target===this)closeInstallHelp()"><div class="install-sheet"><div style="display:flex;justify-content:space-between;align-items:center;gap:10px"><div><div style="font-size:19px;font-weight:900">iPhoneにアプリとして追加</div><div class="sub">Safariから約30秒で追加できます</div></div><button class="btn sm" onclick="closeInstallHelp()">閉じる</button></div><div class="install-step"><div class="stepno">1</div><div><b>このアプリのHTTPS URLをSafariで開く</b><div>ChatGPT内のファイルプレビューではなく、Safariで公開URLを開きます。</div></div></div><div class="install-step"><div class="stepno">2</div><div><b>Safari下部の共有ボタンをタップ</b><div>四角から上向き矢印が出ているアイコンです。</div></div></div><div class="install-step"><div class="stepno">3</div><div><b>「ホーム画面に追加」を選択</b><div>見つからない場合は共有メニューを下へスクロールしてください。</div></div></div><div class="install-step"><div class="stepno">4</div><div><b>右上の「追加」をタップ</b><div>ホーム画面に「Recomp Pro」のアイコンが追加されます。</div></div></div><div class="install-step"><div class="stepno">5</div><div><b>以後はホーム画面のアイコンから起動</b><div>Safariのタブではなく、独立したアプリ画面として起動します。記録はiPhone内に保存されます。</div></div></div><div class="callout warn" style="margin-top:10px"><b>重要：</b>この機能はHTTPSで公開したPWAで有効です。単体HTMLファイルを「ファイル」アプリから開いただけでは、ホーム画面アプリ化や永続保存が安定しません。</div></div></div>
+<nav class="bottomnav">
+  <button class="navbtn active" data-view="dashboard" onclick="go('dashboard')"><span class="icon">⌂</span><span>ホーム</span></button>
+  <button class="navbtn" data-view="workout" onclick="go('workout')"><span class="icon">◆</span><span>筋トレ</span></button>
+  <button class="navbtn" data-view="food" onclick="go('food')"><span class="icon">＋</span><span>食事</span></button>
+  <button class="navbtn" data-view="daily" onclick="go('daily')"><span class="icon">○</span><span>記録</span></button>
+  <button class="navbtn" data-view="settings" onclick="go('settings')"><span class="icon">⚙</span><span>設定</span></button>
+</nav>
+<div id="toast" class="toast"></div>
+<script>
+'use strict';
+const APP_VERSION='3.0.0';
+const CORE_SESSIONS={
+ '月｜下半身A':[
+  ['スクワット','20〜30kg','6〜10',3,'2〜3分'],['レッグプレス','軽めから','10〜12',3,'90秒'],['レッグカール','10〜20kg','10〜15',3,'60〜90秒'],['カーフレイズ','自重〜','15〜20',3,'60秒'],['プランク','自重','20〜30秒',2,'60秒']],
+ '火｜上半身A':[
+  ['ベンチプレス','50〜60kg','6〜8',3,'2〜3分'],['インクラインDBプレス','10〜14kg/片手','8〜12',3,'90秒'],['ラットプルダウン','25〜35kg','8〜12',3,'90秒'],['シーテッドロー','20〜30kg','8〜12',3,'90秒'],['ケーブルプレスダウン','10〜15kg','10〜15',3,'60秒']],
+ '木｜下半身B':[
+  ['デッドリフト','30〜40kg','5〜6',3,'2〜3分'],['ゴブレットスクワット','6〜10kg','10〜12',3,'90秒'],['レッグカール','10〜20kg','10〜15',3,'60〜90秒'],['ラットプルダウン','25〜35kg','10〜12',3,'90秒'],['フェイスプル','軽め','12〜15',3,'60秒']],
+ '金｜上半身B':[
+  ['ベンチプレス','45〜55kg','8〜10',3,'2〜3分'],['DBショルダープレス','8〜12kg/片手','8〜12',3,'90秒'],['サイドレイズ','3〜5kg/片手','12〜20',4,'60秒'],['インクラインDBカール','6〜8kg/片手','10〜15',3,'60秒'],['ハンマーカール','6〜8kg/片手','10〜15',2,'60秒'],['ケーブルプレスダウン','10〜15kg','10〜15',3,'60秒'],['OHトライセプスEX','軽め','10〜15',2,'60秒']]
+};
+const EXTRA_SESSIONS={
+ '追加｜強度維持（全身）':[['ベンチプレス','通常の75〜85%','5',3,'2分'],['ラットプルダウン','軽め','8〜10',2,'90秒'],['ゴブレットスクワット','軽め','8〜10',2,'90秒'],['DBショルダープレス','軽め','8〜10',2,'90秒'],['ハンマーカール','軽め','10〜12',1,'60秒'],['ケーブルプレスダウン','軽め','10〜12',1,'60秒']],
+ '追加｜上半身リカバリー':[['ベンチプレス','通常の70〜80%','6〜8',2,'2分'],['ラットプルダウン','軽〜中','10〜12',2,'90秒'],['シーテッドロー','軽〜中','10〜12',2,'90秒'],['サイドレイズ','軽め','15〜20',2,'60秒'],['ハンマーカール','軽め','10〜15',2,'60秒'],['ケーブルプレスダウン','軽め','10〜15',2,'60秒']],
+ '追加｜下半身リカバリー':[['スクワット','通常の60〜70%','6〜8',2,'2分'],['ゴブレットスクワット','軽め','10',2,'90秒'],['レッグカール','軽〜中','10〜12',2,'75秒'],['カーフレイズ','自重〜軽め','15〜20',2,'60秒'],['プランク','自重','20〜30秒',2,'60秒']],
+ '追加｜不足回収（全身）':[['ベンチプレス','軽め','6',2,'2分'],['ラットプルダウン','軽〜中','10',2,'90秒'],['ゴブレットスクワット','軽め','10',2,'90秒'],['レッグカール','軽〜中','12',2,'75秒'],['サイドレイズ','軽め','15',2,'60秒']],
+ '追加｜軽回復':[['傾斜ウォーキング','会話できる強度','20〜30分',1,'-'],['股関節モビリティ','自重','5分',1,'-'],['胸椎・肩モビリティ','自重','5分',1,'-']]
+};
+const TARGETS={chest:7,back:9,quads:8,hams:7,shoulders:7,biceps:5,triceps:7,core:2};
+const LABELS={chest:'胸',back:'背中',quads:'脚前',hams:'ハム・臀部',shoulders:'肩',biceps:'二頭',triceps:'三頭',core:'体幹'};
+const PRESETS={
+ '大福 1個':[220,4,1,50],'バナナ 1本':[90,1,0.2,23],'プロテイン 1杯':[120,22,2,4],'白米 180g':[281,4.5,0.5,66],'白米 150g':[234,3.8,0.4,55],'白米 100g':[156,2.5,0.3,37],'ちくわ 1本':[35,3.5,0.5,4],'ゆで卵 1個':[76,6.2,5.2,0.2],'納豆 1パック':[90,7.5,5,5],'羊羹 30g':[89,1,0.1,21],'鶏むね肉 150g':[165,34,3.6,0],'鮭 150g':[300,33,18,0],'サバ 150g':[320,31,22,0],'ブロッコリー 100g':[37,5.4,0.6,6.6],'無糖ヨーグルト 150g':[92,5.4,4.5,7.3],'無塩ナッツ 15g':[90,3,8,3]
+};
+const DEFAULT_STATE={version:APP_VERSION,settings:{sex:'male',age:43,height:159,startWeight:69,startBF:24,targetBF:15,kcal:1850,p:145,f:55,c:190},days:{},workouts:{}};
+let STATE=structuredClone(DEFAULT_STATE), storageMode='memory', db=null, currentRecovery='追加｜軽回復';
+
+function clone(x){return JSON.parse(JSON.stringify(x))}
+function today(){const d=new Date(),p=n=>String(n).padStart(2,'0');return `${d.getFullYear()}-${p(d.getMonth()+1)}-${p(d.getDate())}`}
+function num(v){const n=parseFloat(v);return Number.isFinite(n)?n:0}
+function toast(msg){const el=document.getElementById('toast');el.textContent=msg;el.classList.add('show');setTimeout(()=>el.classList.remove('show'),1800)}
+function scrollToId(id){document.getElementById(id)?.scrollIntoView({behavior:'smooth',block:'start'})}
+function dateLabel(s){if(!s)return'';const [y,m,d]=s.split('-');return `${m}/${d}`}
+function weekDates(ref=today()){const d=new Date(ref+'T12:00:00');const dow=(d.getDay()+6)%7;const mon=new Date(d);mon.setDate(d.getDate()-dow);const a=[];for(let i=0;i<7;i++){const x=new Date(mon);x.setDate(mon.getDate()+i);a.push(`${x.getFullYear()}-${String(x.getMonth()+1).padStart(2,'0')}-${String(x.getDate()).padStart(2,'0')}`)}return a}
+function sessionDefs(){return {...CORE_SESSIONS,...EXTRA_SESSIONS}}
+function exerciseCredits(name){if(name.includes('ベンチプレス')&&!name.includes('インクライン'))return{chest:1,triceps:.5,shoulders:.25};if(name.includes('インクラインDB'))return{chest:1,triceps:.5,shoulders:.5};if(name.includes('ラットプル'))return{back:1,biceps:.35};if(name.includes('ロー'))return{back:1,biceps:.35};if(name.includes('スクワット')&&!name.includes('ゴブレット'))return{quads:1,hams:.25,core:.2};if(name.includes('ゴブレット'))return{quads:1,hams:.2,core:.2};if(name.includes('レッグプレス'))return{quads:1,hams:.2};if(name.includes('レッグカール'))return{hams:1};if(name.includes('デッドリフト'))return{hams:1,back:.5,core:.25};if(name.includes('プランク'))return{core:1};if(name.includes('ショルダー'))return{shoulders:1,triceps:.4};if(name.includes('サイドレイズ'))return{shoulders:1};if(name.includes('フェイスプル'))return{shoulders:.7,back:.5};if(name.includes('カール'))return{biceps:1};if(name.includes('プレスダウン')||name.includes('トライセプス'))return{triceps:1};return{}}
+
+async function initStorage(){
+  // 1. IndexedDB
+  try{
+    db=await new Promise((resolve,reject)=>{const r=indexedDB.open('BRT_Pro_v2',1);r.onupgradeneeded=()=>{if(!r.result.objectStoreNames.contains('kv'))r.result.createObjectStore('kv')};r.onsuccess=()=>resolve(r.result);r.onerror=()=>reject(r.error)});
+    storageMode='indexedDB';
+    const saved=await idbGet('state');if(saved)STATE=mergeState(saved);else await persist();
+    updateStorageUI();return;
+  }catch(e){}
+  // 2. localStorage
+  try{localStorage.setItem('__brt_test','1');localStorage.removeItem('__brt_test');storageMode='localStorage';const raw=localStorage.getItem('brt_v2_state');if(raw)STATE=mergeState(JSON.parse(raw));else await persist();updateStorageUI();return}catch(e){}
+  // 3. memory only
+  storageMode='memory';updateStorageUI();
+}
+function idbGet(key){return new Promise((resolve,reject)=>{try{const tx=db.transaction('kv','readonly');const r=tx.objectStore('kv').get(key);r.onsuccess=()=>resolve(r.result);r.onerror=()=>reject(r.error)}catch(e){reject(e)}})}
+function idbPut(key,val){return new Promise((resolve,reject)=>{try{const tx=db.transaction('kv','readwrite');const r=tx.objectStore('kv').put(val,key);r.onsuccess=()=>resolve();r.onerror=()=>reject(r.error)}catch(e){reject(e)}})}
+function mergeState(x){const s=clone(DEFAULT_STATE);if(x&&typeof x==='object'){s.version=APP_VERSION;s.settings={...s.settings,...(x.settings||{})};s.days=x.days||{};s.workouts=x.workouts||{}}return s}
+async function persist(){try{if(storageMode==='indexedDB')await idbPut('state',STATE);else if(storageMode==='localStorage')localStorage.setItem('brt_v2_state',JSON.stringify(STATE));}catch(e){storageMode='memory';updateStorageUI();toast('保存制限を検出。一時保存モードに切替')};renderDashboard()}
+function updateStorageUI(){const dot=document.getElementById('storageDot'),txt=document.getElementById('storageText'),detail=document.getElementById('storageDetail');const good=storageMode!=='memory';dot.className='dot '+(good?'ok':'warn');const label=storageMode==='indexedDB'?'端末内保存：有効（推奨）':storageMode==='localStorage'?'端末内保存：有効': '一時保存モード（バックアップ必須）';txt.textContent=label;if(detail)detail.className='callout '+(good?'good':'warn'),detail.innerHTML=good?`<b>${label}</b><br>このSafari内に記録を保存できます。週1回のJSONバックアップも推奨します。`:`<b>${label}</b><br>この開き方ではiPhoneが永続保存を許可していません。画面は操作できますが、閉じる前に「共有して保存」でJSONバックアップを残してください。HTTPS版をSafariで開くと改善します。`}
+
+function go(id){document.querySelectorAll('.view').forEach(v=>v.classList.toggle('active',v.id===id));document.querySelectorAll('.navbtn').forEach(b=>b.classList.toggle('active',b.dataset.view===id));window.scrollTo({top:0,behavior:'instant'});if(id==='dashboard')renderDashboard();if(id==='workout')renderWorkoutAll();if(id==='food')loadFoodDate();if(id==='daily')loadMetricDate();if(id==='settings')loadSettingsUI()}
+
+function dayFoodTotals(date){const items=STATE.days[date]?.food||[];return items.reduce((a,x)=>({k:a.k+num(x.k),p:a.p+num(x.p),f:a.f+num(x.f),c:a.c+num(x.c)}),{k:0,p:0,f:0,c:0})}
+function renderDashboard(){const s=STATE.settings,date=today(),tot=dayFoodTotals(date),m=STATE.days[date]?.metrics||{};dKcal.textContent=Math.round(tot.k);dP.textContent=Math.round(tot.p);dKcalTarget.textContent=s.kcal;dPTarget.textContent=s.p;dWeight.textContent=m.weight||'--';dBF.textContent=m.bf||'--';dKcalBar.style.width=Math.min(100,(tot.k/s.kcal)*100||0)+'%';let advice=[];if(tot.k&&tot.k<s.kcal-250)advice.push('カロリーが低すぎる可能性');if(tot.p&&tot.p<s.p-10)advice.push('タンパク質を追加');if(m.sleep&&m.sleep<4)advice.push('睡眠4時間未満：高重量は避ける');if(!advice.length)advice.push(tot.k?'大きな不足はありません。週平均で調整してください。':'食事・身体記録を入力すると評価します。');dAdvice.textContent=advice.join(' / ');const wa=weeklyAnalysis();dTrainCount.textContent=wa.coreCount;dSleep.textContent=wa.avgSleep||'--';const rec=getRecovery(wa);dRecovery.textContent=rec.why;renderTrendList()}
+function renderTrendList(){const dates=Object.keys(STATE.days).sort().slice(-7).reverse();trendList.innerHTML=dates.length?dates.map(d=>{const m=STATE.days[d]?.metrics||{};return `<div class="daycard"><div class="daybubble">${dateLabel(d)}</div><div class="daybody"><b>${m.weight?m.weight+'kg':'体重未入力'} / ${m.bf?m.bf+'%':'体脂肪未入力'}</b><span>睡眠 ${m.sleep||'-'}h ・ 腹囲 ${m.waist||'-'}cm</span></div></div>`}).join(''):'<div class="empty">記録を始めるとここに表示されます。</div>'}
+
+function initWorkoutSelect(){wSession.innerHTML='';const g1=document.createElement('optgroup');g1.label='週4 基本';Object.keys(CORE_SESSIONS).forEach(k=>{const o=document.createElement('option');o.textContent=k;o.value=k;g1.appendChild(o)});const g2=document.createElement('optgroup');g2.label='追加 / リカバリー';Object.keys(EXTRA_SESSIONS).forEach(k=>{const o=document.createElement('option');o.textContent=k;o.value=k;g2.appendChild(o)});wSession.append(g1,g2)}
+function renderWorkoutEditor(record=null){const key=wSession.value,defs=sessionDefs()[key]||[];exerciseEditor.innerHTML='';defs.forEach(def=>{const [name,weightGuide,repsGuide,plannedSets]=def;const prior=record?.exercises?.find(x=>x.name===name);const card=document.createElement('div');card.className='exercise-card';card.dataset.name=name;let setHtml='';for(let i=0;i<plannedSets;i++){const ps=prior?.sets?.[i]||{};setHtml+=`<div class="setrow"><div class="setno">${i+1}</div><div><label>重量kg</label><input class="sw" type="number" inputmode="decimal" step="0.5" value="${ps.weight??''}" oninput="updateWorkoutLive()"></div><div><label>回数</label><input class="sr" type="number" inputmode="numeric" step="1" value="${ps.reps??''}" oninput="updateWorkoutLive()"></div><div class="rpe"><label>RPE</label><input class="se" type="number" inputmode="decimal" min="1" max="10" step="0.5" value="${ps.rpe??''}" oninput="updateWorkoutLive()"></div><div class="donecheck"><input class="sd" aria-label="完了" type="checkbox" ${ps.done?'checked':''} onchange="updateWorkoutLive()"></div></div>`}card.innerHTML=`<div class="exercise-head"><div><b>${name}</b><div class="sub">目安 ${weightGuide} / ${repsGuide}回 × ${plannedSets}セット</div></div><span>${def[4]}</span></div>${setHtml}`;exerciseEditor.appendChild(card)});updateWorkoutLive()}
+function collectWorkout(){return [...exerciseEditor.querySelectorAll('.exercise-card')].map(card=>({name:card.dataset.name,sets:[...card.querySelectorAll('.setrow')].map(row=>({weight:num(row.querySelector('.sw').value),reps:num(row.querySelector('.sr').value),rpe:num(row.querySelector('.se').value),done:row.querySelector('.sd').checked}))}))}
+function workoutStats(rec){let planned=0,done=0,volume=0,rpes=[];rec.exercises?.forEach(ex=>ex.sets?.forEach(s=>{planned++;if(s.done||s.reps>0){done++;volume+=num(s.weight)*num(s.reps);if(s.rpe)rpes.push(s.rpe)}}));return{planned,done,volume,avgRPE:rpes.length?rpes.reduce((a,b)=>a+b,0)/rpes.length:0}}
+function updateWorkoutLive(){const rec={exercises:collectWorkout()},st=workoutStats(rec);document.getElementById('workoutLive').innerHTML=`セット <b>${st.done}/${st.planned}</b> ・ 参考Volume <b>${Math.round(st.volume).toLocaleString()}</b> ・ 平均RPE <b>${st.avgRPE?st.avgRPE.toFixed(1):'-'}</b><br>${st.avgRPE>=9?'RPEが高め。追加セットより回復優先。':'各セットの実績を入れて保存してください。'}`}
+async function saveWorkout(){const date=wDate.value||today();const rec={session:wSession.value,minutes:num(wMinutes.value),fatigue:num(wFatigue.value),exercises:collectWorkout()};STATE.workouts[date]=rec;STATE.days[date]=STATE.days[date]||{};STATE.days[date].trained=true;await persist();toast('トレーニングを保存しました');renderWorkoutAll()}
+function resetWorkoutEditor(){wMinutes.value='';wFatigue.value='';renderWorkoutEditor()}
+function loadWorkoutDate(){const rec=STATE.workouts[wDate.value];if(rec){wSession.value=rec.session;wMinutes.value=rec.minutes||'';wFatigue.value=rec.fatigue||'';renderWorkoutEditor(rec)}else resetWorkoutEditor()}
+function weeklyAnalysis(){const dates=weekDates(),muscles=Object.fromEntries(Object.keys(TARGETS).map(k=>[k,0]));let coreCount=0,extraCount=0,rpes=[],sleeps=[],fatigues=[];dates.forEach(d=>{const rec=STATE.workouts[d];if(rec){if(CORE_SESSIONS[rec.session])coreCount++;else extraCount++;if(rec.fatigue)fatigues.push(rec.fatigue);rec.exercises?.forEach(ex=>{const credit=exerciseCredits(ex.name);const completed=ex.sets?.filter(s=>s.done||s.reps>0).length||0;Object.entries(credit).forEach(([k,v])=>muscles[k]+=completed*v);ex.sets?.forEach(s=>{if(s.rpe)rpes.push(s.rpe)})})}const sl=STATE.days[d]?.metrics?.sleep;if(sl)sleeps.push(sl)});return{dates,muscles,coreCount,extraCount,avgRPE:rpes.length?rpes.reduce((a,b)=>a+b,0)/rpes.length:0,avgSleep:sleeps.length?sleeps.reduce((a,b)=>a+b,0)/sleeps.length:0,avgFatigue:fatigues.length?fatigues.reduce((a,b)=>a+b,0)/fatigues.length:0}}
+function getRecovery(wa=weeklyAnalysis()){const pct=k=>wa.muscles[k]/TARGETS[k];if((wa.avgSleep&&wa.avgSleep<4)||wa.avgRPE>=9||wa.avgFatigue>=4.5)return{key:'追加｜軽回復',why:'睡眠・RPE・疲労から、追加の筋トレより回復を優先します。'};const upper=(pct('chest')+pct('back')+pct('shoulders')+pct('biceps')+pct('triceps'))/5,lower=(pct('quads')+pct('hams'))/2;if(wa.coreCount>=4&&wa.avgRPE<8.5&&(!wa.avgSleep||wa.avgSleep>=4.5))return{key:'追加｜強度維持（全身）',why:'基本4回を達成。疲労が高くなければ、任意で30〜40分の強度維持日を追加できます。休む選択も正解です。'};if(lower<.65&&lower<upper)return{key:'追加｜下半身リカバリー',why:'今週は下半身の実施量が不足気味です。軽めの追加日で補います。'};if(upper<.70)return{key:'追加｜上半身リカバリー',why:'今週は上半身の実施量が不足気味です。胸・背中・肩・腕を軽めに補います。'};return{key:'追加｜不足回収（全身）',why:'大きな偏りはありませんが、週4未達分を全身軽めで補う候補です。'}}
+function renderWeekEval(){const wa=weeklyAnalysis();weekKpis.innerHTML=`<div class="kpi"><div class="label">基本トレ</div><div class="value">${wa.coreCount}<small>/4</small></div></div><div class="kpi"><div class="label">追加日</div><div class="value">${wa.extraCount}</div></div><div class="kpi"><div class="label">平均RPE</div><div class="value">${wa.avgRPE?wa.avgRPE.toFixed(1):'--'}</div></div><div class="kpi"><div class="label">平均睡眠</div><div class="value">${wa.avgSleep?wa.avgSleep.toFixed(1):'--'}<small>h</small></div></div>`;muscleBars.innerHTML=Object.keys(TARGETS).map(k=>{const pct=Math.min(120,Math.round(wa.muscles[k]/TARGETS[k]*100));return `<div class="muscle"><div class="name">${LABELS[k]}</div><div class="progress ${pct>=80?'goodbar':''}"><span style="width:${Math.min(100,pct)}%"></span></div><div class="pct">${pct}%</div></div>`}).join('');const rec=getRecovery(wa);currentRecovery=rec.key;recoveryWhy.textContent=rec.why;const defs=EXTRA_SESSIONS[rec.key]||[];recoveryMenu.innerHTML=defs.map(e=>`<div class="recovery-ex"><div><b>${e[0]}</b><div class="sub">${e[2]} × ${e[3]}</div></div><span>${e[1]}<br>${e[4]}</span></div>`).join('')}
+function loadRecoverySession(){wSession.value=currentRecovery;renderWorkoutEditor();scrollToId('workoutEntry');toast('おすすめメニューをセットしました')}
+function renderProgram(){programList.innerHTML=Object.entries(CORE_SESSIONS).map(([k,arr])=>{const [day,part]=k.split('｜');return `<div class="daycard"><div class="daybubble">${day}</div><div class="daybody"><b>${part}</b><span>${arr.map(x=>x[0]).join(' / ')}</span></div></div>`}).join('')}
+function renderWorkoutHistory(){const ds=Object.keys(STATE.workouts).sort().reverse().slice(0,12);workoutHistory.innerHTML=ds.length?ds.map(d=>{const r=STATE.workouts[d],st=workoutStats(r);return `<div class="history-item"><div class="top"><b>${dateLabel(d)} ${r.session}</b><button class="chip" onclick="editWorkout('${d}')">編集</button></div><small>セット ${st.done}/${st.planned} ・ Volume ${Math.round(st.volume).toLocaleString()} ・ RPE ${st.avgRPE?st.avgRPE.toFixed(1):'-'}</small></div>`}).join(''):'<div class="empty">まだトレーニング履歴がありません。</div>'}
+function editWorkout(d){wDate.value=d;loadWorkoutDate();scrollToId('workoutEntry')}
+function renderWorkoutAll(){renderProgram();renderWeekEval();renderWorkoutHistory();if(!exerciseEditor.children.length)renderWorkoutEditor()}
+
+function initPresets(){presetGrid.innerHTML=Object.entries(PRESETS).map(([name,v])=>`<button class="foodchip" onclick="addPreset('${name.replaceAll("'","\\'")}')"><b>${name}</b><small>${v[0]}kcal / P${v[1]} F${v[2]} C${v[3]}</small></button>`).join('')}
+function addPreset(name){addFoodItem({name,k:PRESETS[name][0],p:PRESETS[name][1],f:PRESETS[name][2],c:PRESETS[name][3]})}
+function addFoodItem(v={name:'',k:0,p:0,f:0,c:0}){const div=document.createElement('div');div.className='fooditem';div.innerHTML=`<div class="foodtop"><input class="fname" placeholder="食品名" value="${v.name||''}"><button class="remove" onclick="this.closest('.fooditem').remove();sumFoodUI()">×</button></div><div class="macro4"><div><label>kcal</label><input class="fk" type="number" inputmode="decimal" value="${v.k||0}" oninput="sumFoodUI()"></div><div><label>P g</label><input class="fp" type="number" inputmode="decimal" step="0.1" value="${v.p||0}" oninput="sumFoodUI()"></div><div><label>F g</label><input class="ff" type="number" inputmode="decimal" step="0.1" value="${v.f||0}" oninput="sumFoodUI()"></div><div><label>C g</label><input class="fc" type="number" inputmode="decimal" step="0.1" value="${v.c||0}" oninput="sumFoodUI()"></div></div>`;foodList.appendChild(div);sumFoodUI()}
+function collectFood(){return [...foodList.querySelectorAll('.fooditem')].map(x=>({name:x.querySelector('.fname').value.trim(),k:num(x.querySelector('.fk').value),p:num(x.querySelector('.fp').value),f:num(x.querySelector('.ff').value),c:num(x.querySelector('.fc').value)})).filter(x=>x.name||x.k||x.p||x.f||x.c)}
+function sumFoodUI(){const t=collectFood().reduce((a,x)=>({k:a.k+x.k,p:a.p+x.p,f:a.f+x.f,c:a.c+x.c}),{k:0,p:0,f:0,c:0}),s=STATE.settings;fSumKcal.textContent=Math.round(t.k);fSumP.textContent=Math.round(t.p*10)/10;fSumF.textContent=Math.round(t.f*10)/10;fSumC.textContent=Math.round(t.c*10)/10;let a=[];if(t.k>s.kcal+150)a.push('カロリーが目標より高め');if(t.k&&t.k<s.kcal-250)a.push('摂取量が低すぎる可能性');if(t.p<s.p-10)a.push('P不足：肉・魚・卵などを追加');if(t.f<45)a.push('脂質少なめ：魚・卵・ナッツなどを検討');if(!a.length)a.push('目標レンジに近いです。');foodAdvice.textContent=a.join(' / ')}
+async function saveFood(){const d=fDate.value||today();STATE.days[d]=STATE.days[d]||{};STATE.days[d].food=collectFood();await persist();toast('食事を保存しました')}
+function loadFoodDate(){const d=fDate.value||today();foodList.innerHTML='';const items=STATE.days[d]?.food||[];if(items.length)items.forEach(addFoodItem);else addFoodItem();foodTargetText.value=`${STATE.settings.kcal} kcal / P${STATE.settings.p}g`;sumFoodUI()}
+
+function metricAdviceText(){const sleep=num(mSleep.value),bf=num(mBF.value),veg=num(mVeg.value),cond=num(mCondition.value);const a=[];if(sleep&&sleep<4)a.push('睡眠4時間未満：高重量は避ける');else if(sleep>=5)a.push('生活上の上限5時間を確保');if(veg&&veg<250)a.push('野菜は300g前後を目標');if(bf&&bf<=STATE.settings.targetBF)a.push('目標体脂肪率を達成');if(cond&&cond<=2)a.push('疲労が強い日は追加トレ不要');return a.join(' / ')||'入力すると、その日の簡易評価を表示します。'}
+function updateMetricAdvice(){metricAdvice.textContent=metricAdviceText()}
+async function saveMetrics(){const d=mDate.value||today();STATE.days[d]=STATE.days[d]||{};STATE.days[d].metrics={weight:num(mWeight.value),bf:num(mBF.value),waist:num(mWaist.value),sleep:num(mSleep.value),steps:num(mSteps.value),veg:num(mVeg.value),water:num(mWater.value),condition:num(mCondition.value),memo:mMemo.value};await persist();toast('身体記録を保存しました');renderMetricHistory()}
+function loadMetricDate(){const d=mDate.value||today(),m=STATE.days[d]?.metrics||{};mWeight.value=m.weight||'';mBF.value=m.bf||'';mWaist.value=m.waist||'';mSleep.value=m.sleep||'';mSteps.value=m.steps||'';mVeg.value=m.veg||'';mWater.value=m.water||'';mCondition.value=m.condition||'';mMemo.value=m.memo||'';updateMetricAdvice();renderMetricHistory()}
+function renderMetricHistory(){const ds=Object.keys(STATE.days).filter(d=>STATE.days[d].metrics).sort().reverse().slice(0,10);metricHistory.innerHTML=ds.length?ds.map(d=>{const m=STATE.days[d].metrics;return `<div class="history-item"><div class="top"><b>${dateLabel(d)} ${m.weight||'-'}kg / ${m.bf||'-'}%</b><small>睡眠 ${m.sleep||'-'}h</small></div><small>腹囲 ${m.waist||'-'}cm ・ 歩数 ${m.steps||'-'} ・ 体調 ${m.condition||'-'}</small></div>`}).join(''):'<div class="empty">まだ身体記録がありません。</div>'}
+['mWeight','mBF','mWaist','mSleep','mSteps','mVeg','mWater','mCondition'].forEach(id=>document.addEventListener('input',e=>{if(e.target.id===id)updateMetricAdvice()}));
+
+function loadSettingsUI(){const s=STATE.settings;sAge.value=s.age;sHeight.value=s.height;sWeight.value=s.startWeight;sBF.value=s.startBF;sTargetBF.value=s.targetBF;sSex.value=s.sex;sKcal.value=s.kcal;sP.value=s.p;sF.value=s.f;sC.value=s.c;updateStorageUI()}
+function recalcTargets(){const sex=sSex.value,age=num(sAge.value),h=num(sHeight.value),w=num(sWeight.value);const bmr=10*w+6.25*h-5*age+(sex==='male'?5:-161);const tdee=bmr*1.45;const kcal=Math.max(1600,Math.round((tdee-300)/10)*10),p=Math.round(w*2.1),f=Math.max(50,Math.round(w*.8)),c=Math.max(100,Math.round((kcal-p*4-f*9)/4));sKcal.value=kcal;sP.value=p;sF.value=f;sC.value=c;toast(`目安 ${kcal}kcal に更新`)}
+async function saveSettings(){STATE.settings={sex:sSex.value,age:num(sAge.value),height:num(sHeight.value),startWeight:num(sWeight.value),startBF:num(sBF.value),targetBF:num(sTargetBF.value),kcal:num(sKcal.value),p:num(sP.value),f:num(sF.value),c:num(sC.value)};await persist();toast('設定を保存しました');renderDashboard()}
+
+function backupText(){return JSON.stringify({...STATE,exportedAt:new Date().toISOString()},null,2)}
+function downloadBackup(){const blob=new Blob([backupText()],{type:'application/json'}),a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=`body_recomp_v2_${today()}.json`;document.body.appendChild(a);a.click();setTimeout(()=>{URL.revokeObjectURL(a.href);a.remove()},500)}
+async function shareBackup(){const txt=backupText(),name=`body_recomp_v2_${today()}.json`;try{const file=new File([txt],name,{type:'application/json'});if(navigator.canShare&&navigator.canShare({files:[file]})&&navigator.share){await navigator.share({title:'Body Recomp Tracker バックアップ',files:[file]});return}}catch(e){if(e?.name==='AbortError')return}downloadBackup();toast('共有非対応のためJSONを書き出しました')}
+function importBackup(ev){const f=ev.target.files?.[0];if(!f)return;const r=new FileReader();r.onload=async()=>{try{STATE=mergeState(JSON.parse(r.result));await persist();toast('バックアップを読み込みました');loadSettingsUI();renderAll()}catch(e){toast('JSONを読み込めませんでした')}};r.readAsText(f);ev.target.value=''}
+async function resetAllData(){if(!confirm('記録をすべて削除します。よろしいですか？'))return;STATE=clone(DEFAULT_STATE);await persist();renderAll();toast('全データを削除しました')}
+
+function renderAll(){renderDashboard();renderWorkoutAll();loadFoodDate();loadMetricDate();loadSettingsUI()}
+
+let deferredInstallPrompt=null;
+let waitingServiceWorker=null;
+function isStandaloneMode(){return window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone===true}
+function isIOS(){return /iphone|ipad|ipod/i.test(navigator.userAgent)}
+function updateInstallState(){
+  const standalone=isStandaloneMode();
+  const banner=document.getElementById('installBanner');
+  const status=document.getElementById('appModeStatus');
+  let dismissed=false;try{dismissed=sessionStorage.getItem('brt_install_dismissed')==='1'}catch(e){}
+  if(banner) banner.classList.toggle('show',!standalone&&!dismissed);
+  if(status){
+    if(standalone){status.className='callout good';status.innerHTML='<b>アプリモードで起動中</b><br>ホーム画面のアイコンから独立したアプリとして動作しています。'}
+    else if(location.protocol==='https:'){status.className='callout';status.innerHTML='<b>Safari表示中</b><br>「ホーム画面に追加」を行うと、次回からアプリ画面として起動できます。'}
+    else{status.className='callout warn';status.innerHTML='<b>インストール準備が必要</b><br>ホーム画面アプリ化にはHTTPSで公開したURLをSafariで開く必要があります。'}
+  }
+}
+function openInstallHelp(){document.getElementById('installModal')?.classList.add('show')}
+function closeInstallHelp(){document.getElementById('installModal')?.classList.remove('show')}
+function dismissInstallBanner(){try{sessionStorage.setItem('brt_install_dismissed','1')}catch(e){}updateInstallState()}
+window.addEventListener('beforeinstallprompt',e=>{e.preventDefault();deferredInstallPrompt=e;updateInstallState()});
+window.addEventListener('appinstalled',()=>{deferredInstallPrompt=null;updateInstallState();toast('ホーム画面への追加が完了しました')});
+window.matchMedia('(display-mode: standalone)').addEventListener?.('change',updateInstallState);
+async function registerPWA(){
+  if(!('serviceWorker' in navigator) || location.protocol!=='https:') return;
+  try{
+    const reg=await navigator.serviceWorker.register('./service-worker.js',{scope:'./'});
+    if(reg.waiting){waitingServiceWorker=reg.waiting;document.getElementById('updateBanner')?.classList.add('show')}
+    reg.addEventListener('updatefound',()=>{
+      const nw=reg.installing;if(!nw)return;
+      nw.addEventListener('statechange',()=>{if(nw.state==='installed'&&navigator.serviceWorker.controller){waitingServiceWorker=reg.waiting||nw;document.getElementById('updateBanner')?.classList.add('show')}})
+    });
+    navigator.serviceWorker.addEventListener('controllerchange',()=>{if(window.__brtUpdating)return;window.__brtUpdating=true;location.reload()});
+  }catch(e){console.warn('PWA register failed',e)}
+}
+function applyAppUpdate(){if(waitingServiceWorker)waitingServiceWorker.postMessage({type:'SKIP_WAITING'});else location.reload()}
+
+async function boot(){await initStorage();wDate.value=fDate.value=mDate.value=today();initWorkoutSelect();wDate.addEventListener('change',loadWorkoutDate);initPresets();renderWorkoutEditor();loadFoodDate();loadMetricDate();loadSettingsUI();renderDashboard();renderWorkoutAll();updateInstallState();registerPWA()}
+boot();
+</script>
+</body>
+</html>

@@ -1,0 +1,35 @@
+Body Recomp Tracker Pro — iPhoneアプリ版 v3
+
+【結論】
+このフォルダをHTTPSのWebサイトとして公開し、iPhoneのSafariで開いて「ホーム画面に追加」すると、
+Safariのタブではなく独立したアプリ画面として起動できます。
+
+【必要なファイル】
+index.html
+manifest.webmanifest
+service-worker.js
+icon-180.png
+icon-192.png
+icon-512.png
+
+【一番簡単な公開方法（PCを使える場合）】
+1. このZIPを解凍する
+2. 解凍したフォルダ内の6ファイルを、静的Webホスティングへアップロードする
+   例：Netlify / Cloudflare Pages / GitHub Pages など
+3. 発行された https:// で始まるURLをiPhoneのSafariで開く
+4. Safariの共有ボタン →「ホーム画面に追加」→「追加」
+5. ホーム画面の「Recomp Pro」をタップして起動
+
+【アプリとして起動できているか】
+設定画面の「iPhoneアプリとして使う」に「アプリモードで起動中」と表示されればOKです。
+
+【オフライン】
+一度正常にHTTPS版を開き、ホーム画面に追加した後は、基本画面はオフラインでも起動できます。
+食事・体重・筋トレ等のデータはiPhone内に保存します。
+
+【バックアップ】
+設定 > バックアップ > 共有して保存 を週1回程度実行してください。
+
+【重要】
+ChatGPT内のHTMLプレビューや「ファイル」アプリからHTMLを直接開くだけでは、PWAのインストール・永続保存が安定しません。
+必ずHTTPS URLをSafariで開いてください。
